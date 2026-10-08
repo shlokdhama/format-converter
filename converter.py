@@ -1,21 +1,21 @@
 import subprocess
-import os
+from pathlib import Path
 
-path = input("enter input path: ")
-path = path[1:-1]
+path = input("Enter input path: ").strip().strip('"')
+path = Path(path)
 
-if not os.path.exists(path):
+if not Path.exists(path):
     print("Path does not exist.")
     exit()
 
-ext = input("enter desired format: ")
+ext = input("enter desired format: ").strip().lower()
 
-new = path
+base, _ = path.stem, path.suffix
+new = base + "." + ext
 
-i=-1
-while(new[i]!= '.'):
-    i-=1
+result = subprocess.run(["magick", path, new])
 
-new = new[:i] + '.' + ext
-
-subprocess.run(["magick", path, new])
+if result.returncode == 0:
+    print(f"success: {new}")
+else:
+    print("failed")
