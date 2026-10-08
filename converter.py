@@ -1,16 +1,15 @@
 import subprocess
-from pathlib import Path
+import os
 
 path = input("Enter input path: ").strip().strip('"')
-path = Path(path)
 
-if not Path.exists(path):
+if not os.path.exists(path):
     print("Path does not exist.")
     exit()
 
 ext = input("Enter desired format: ").strip().lower()
 
-base, _ = path.stem, path.suffix
+base, _ = os.path.splitext(path)
 new = base + "." + ext
 
 result = subprocess.run(["magick", path, new])
